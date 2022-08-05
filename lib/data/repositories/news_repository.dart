@@ -16,6 +16,6 @@ class NewsRepository {
     for (var element in response) {
       allNews.add(News.fromJson(element));
     }
-    return [];
+    return allNews;
   }
 }
