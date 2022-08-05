@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/app_router.dart';
 
 void main() {
-  runApp(const NewsApp());
+  runApp( NewsApp(appRouter: AppRouter(),));
 }
 
 class NewsApp extends StatelessWidget {
 
-  const NewsApp({Key? key}) : super(key: key);
+  final AppRouter appRouter;
+  const NewsApp({Key? key, required this.appRouter}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp();
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      onGenerateRoute: appRouter.generateRoute,
+    );
   }
 }
