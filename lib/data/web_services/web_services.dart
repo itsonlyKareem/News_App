@@ -5,7 +5,7 @@ import 'package:news_app/constants/app_constants.dart';
 import 'package:news_app/data/models/news.dart';
 
 class NewsWebServices {
-  late Dio dio;
+  Dio dio = Dio();
 
 /*
   In this constructor, the base options for Dio are initialized.
@@ -26,6 +26,17 @@ class NewsWebServices {
     try {
       Response response = await dio.get(EVERYTHING_ENDPOINT,
       queryParameters: {'q': query});
+      return response.data;
+    } catch (e) {
+      print(e.toString());
+      return [];
+    }
+  }
+
+  Future<dynamic> getTopHeadlines(String query) async {
+    try {
+      Response response = await dio.get(TOP_HEADLINES_ENDPOINT,
+      queryParameters: {'q' : query, 'language' : 'en'});
       return response.data;
     } catch (e) {
       print(e.toString());
