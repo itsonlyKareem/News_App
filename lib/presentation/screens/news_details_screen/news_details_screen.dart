@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/data/models/news_details_arguments.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants/app_constants.dart';
@@ -17,7 +18,6 @@ class NewsDetailsScreen extends StatelessWidget {
     DateTime now = DateTime.now();
     DateTime publishedAt = DateTime.parse(arguments.publishedAt);
     Duration diff = now.difference(publishedAt);
-    print(arguments.content);
 
     return SafeArea(
       child: Scaffold(
@@ -25,14 +25,17 @@ class NewsDetailsScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Stack(
             children: [
-              CachedNetworkImage(
-                imageUrl: arguments.image,
-                placeholder: (context, url) => Image.asset(placeholderImage),
-                errorWidget: (context, url, error) =>
-                    Image.asset(placeholderImage),
-                height: MediaQuery.of(context).size.height * 0.4,
-                fit: BoxFit.cover,
-                filterQuality: FilterQuality.high,
+              Hero(
+                tag: arguments.title,
+                child: CachedNetworkImage(
+                  imageUrl: arguments.image,
+                  placeholder: (context, url) => Image.asset(placeholderImage),
+                  errorWidget: (context, url, error) =>
+                      Image.asset(placeholderImage),
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  fit: BoxFit.cover,
+                  filterQuality: FilterQuality.high,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -55,16 +58,21 @@ class NewsDetailsScreen extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: blackColor.withOpacity(0.5)),
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.share,
-                          size: 18,
-                          color: whiteColor,
+                    GestureDetector(
+                      onTap: () {
+                        Share.share(arguments.url);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: blackColor.withOpacity(0.5)),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.share,
+                            size: 18,
+                            color: whiteColor,
+                          ),
                         ),
                       ),
                     ),

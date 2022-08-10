@@ -5,6 +5,7 @@ import 'package:news_app/business_logic/cubit/news_cubit.dart';
 import 'package:news_app/constants/app_constants.dart';
 import 'package:news_app/data/models/news_details_arguments.dart';
 import 'package:news_app/presentation/screens/news_details_screen/news_details_screen.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../data/models/news.dart';
@@ -24,7 +25,7 @@ class Headlines extends StatelessWidget {
           baseColor: greyColor,
           highlightColor: whiteColor,
           child: Column(
-            children: [ShimmeringContainer(), ShimmeringContainer()],
+            children: [shimmeringContainer(), shimmeringContainer()],
           ),
         );
       } else if (state is NewsLoaded) {
@@ -63,15 +64,18 @@ class Headlines extends StatelessWidget {
                   padding: const EdgeInsets.all(15.0),
                   child: Column(
                     children: [
-                      CachedNetworkImage(
-                        imageUrl: news[index].image,
-                        placeholder: (context, url) =>
-                            Image.asset(placeholderImage),
-                        errorWidget: (context, url, error) =>
-                            Image.asset(placeholderImage),
-                        height: 200,
-                        fit: BoxFit.cover,
-                        filterQuality: FilterQuality.high,
+                      Hero(
+                        tag: news[index].title,
+                        child: CachedNetworkImage(
+                          imageUrl: news[index].image,
+                          placeholder: (context, url) =>
+                              Image.asset(placeholderImage),
+                          errorWidget: (context, url, error) =>
+                              Image.asset(placeholderImage),
+                          height: 200,
+                          fit: BoxFit.cover,
+                          filterQuality: FilterQuality.high,
+                        ),
                       ),
                       const SizedBox(height: 10),
                       Text(
@@ -106,7 +110,9 @@ class Headlines extends StatelessWidget {
                           ),
                           const Spacer(),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Share.share(news[index].url);
+                            },
                             child: const Icon(
                               Icons.share,
                               color: blackColor,
@@ -137,7 +143,7 @@ class Headlines extends StatelessWidget {
     });
   }
 
-  Widget ShimmeringContainer() {
+  Widget shimmeringContainer() {
     return Column(
       children: [
         Padding(

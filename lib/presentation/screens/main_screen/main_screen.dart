@@ -5,9 +5,12 @@ import 'package:news_app/constants/app_constants.dart';
 import 'package:news_app/presentation/screens/main_screen/components/headlines.dart';
 import 'package:news_app/presentation/screens/main_screen/components/news_carousel.dart';
 import 'package:news_app/presentation/screens/main_screen/components/see_more.dart';
+import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 
 class NewsScreen extends StatelessWidget {
-  const NewsScreen({Key? key}) : super(key: key);
+  NewsScreen({Key? key}) : super(key: key);
+
+  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
 
   //Build the App Bar.
   AppBar buildAppBar() {
@@ -21,7 +24,14 @@ class NewsScreen extends StatelessWidget {
   List<Widget> appBarActions() {
     return [
       GestureDetector(
-        onTap: () {},
+        onTap: () {
+          final state = _sideMenuKey.currentState;
+          if (state!.isOpened) {
+            state.closeSideMenu();
+          } else {
+            state.openSideMenu();
+          }
+        },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SizedBox(
@@ -170,27 +180,106 @@ class NewsScreen extends StatelessWidget {
     );
   }
 
+  Widget buildMenu(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SideMenuItem(
+          title: 'Saved',
+          icon: Icons.bookmark,
+          onClick: () {
+          },
+        ),
+        Divider(
+          thickness: 1,
+          color: whiteColor,
+          endIndent: MediaQuery.of(context).size.width * 0.25,
+        ),
+        const Text(
+          'Categories',
+          style: TextStyle(color: secondaryColor, fontWeight: semiBoldFont),
+          textAlign: TextAlign.start,
+        ),
+        SideMenuItem(
+            icon: Icons.cases_sharp, title: 'Business', onClick: () {}),
+        SideMenuItem(
+            icon: Icons.emoji_emotions, title: 'Entertainment', onClick: () {}),
+        SideMenuItem(icon: Icons.newspaper, title: 'General', onClick: () {}),
+        SideMenuItem(
+            icon: Icons.local_hospital, title: 'Health', onClick: () {}),
+        SideMenuItem(icon: Icons.science, title: 'Science', onClick: () {}),
+        SideMenuItem(icon: Icons.sports, title: 'Sports', onClick: () {}),
+        SideMenuItem(
+            icon: Icons.electric_bolt, title: 'Technology', onClick: () {})
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: buildAppBar(),
-        body: OfflineBuilder(
-          connectivityBuilder: (
-            BuildContext context,
-            ConnectivityResult connectivity,
-            Widget child,
-          ) {
-            final bool connected = connectivity != ConnectivityResult.none;
-            if (connected) {
-              return buildBlocWidget();
-            } else {
-              return noInternetWidget();
-            }
-          },
-          child: Container(),
+      child: SideMenu(
+        key: _sideMenuKey,
+        menu: buildMenu(context),
+        type: SideMenuType.shrikNRotate,
+        background: blackColor,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: buildAppBar(),
+          body: OfflineBuilder(
+            connectivityBuilder: (
+              BuildContext context,
+              ConnectivityResult connectivity,
+              Widget child,
+            ) {
+              final bool connected = connectivity != ConnectivityResult.none;
+              if (connected) {
+                return buildBlocWidget();
+              } else {
+                return noInternetWidget();
+              }
+            },
+            child: Container(),
+          ),
         ),
+      ),
+    );
+  }
+}
+
+class SideMenuItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final Function() onClick;
+
+  const SideMenuItem({
+    Key? key,
+    required this.icon,
+    required this.title,
+    required this.onClick,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onClick,
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: whiteColor,
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          )
+        ],
       ),
     );
   }

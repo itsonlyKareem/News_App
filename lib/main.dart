@@ -24,7 +24,7 @@ class NewsApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: fontFamily,
         ),
-        home: const NewsScreen(),
+        home: NewsScreen(),
         initialRoute: allNewsScreen,
       ),
     );

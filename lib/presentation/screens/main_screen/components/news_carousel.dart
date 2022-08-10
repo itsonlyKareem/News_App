@@ -81,15 +81,18 @@ class NewsCarousel extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      CachedNetworkImage(
-                        imageUrl: topNews[index].image,
-                        height: 250,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) =>
-                            Image.asset(placeholderImage),
-                        errorWidget: (context, url, error) =>
-                            Image.asset(placeholderImage),
-                        filterQuality: FilterQuality.high,
+                      Hero(
+                        tag: topNews[index].title,
+                        child: CachedNetworkImage(
+                          imageUrl: topNews[index].image,
+                          height: 250,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) =>
+                              Image.asset(placeholderImage),
+                          errorWidget: (context, url, error) =>
+                              Image.asset(placeholderImage),
+                          filterQuality: FilterQuality.high,
+                        ),
                       ),
                       const SizedBox(height: 20),
                       Expanded(

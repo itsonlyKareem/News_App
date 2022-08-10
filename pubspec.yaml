@@ -40,11 +40,12 @@ dependencies:
   flutter_svg: ^1.1.2
   flutter_offline: ^2.1.0
   internet_connection_checker: ^0.0.1+4
-  shimmer_animation: ^2.1.0+1
   shimmer: ^2.0.0
   carousel_slider: ^4.1.1
   cached_network_image: ^3.2.1
   url_launcher: ^6.1.5
+  shrink_sidemenu: ^2.0.0+2-null-safety
+  share_plus: ^4.0.10
 
 dev_dependencies:
   flutter_test:

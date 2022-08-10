@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:news_app/data/models/news.dart';
 import 'package:news_app/data/models/top_news.dart';
 
